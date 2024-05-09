@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import reactor.core.publisher.Mono;
 
-import java.rmi.ServerException;
 
 @RestControllerAdvice
 public class ApplicationAdvice {

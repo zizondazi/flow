@@ -1,12 +1,11 @@
 package com.fastcampust.flow.controller;
 
+import com.fastcampust.flow.dto.AllowUserResponse;
+import com.fastcampust.flow.dto.AllowedUserResponse;
 import com.fastcampust.flow.dto.RegisterUserResponse;
 import com.fastcampust.flow.service.UserQueueService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -22,4 +21,17 @@ public class UserQueueController {
                 .map(RegisterUserResponse::new);
     }
 
+    @PostMapping("/allow")
+    public Mono<AllowUserResponse> allowUser(@RequestParam(name = "queue", defaultValue = "default") String queue,
+                                             @RequestParam(name = "allow_count") Long allow_count) {
+        return userQueueService.allowUser(queue, allow_count)
+                .map(allowed -> new AllowUserResponse(allow_count, allowed));
+    }
+
+    @GetMapping("/allowed")
+    public Mono<AllowedUserResponse> isAllowed(@RequestParam(name = "queue", defaultValue = "default") String queue,
+                                               @RequestParam(name = "user_id") Long userId) {
+        return userQueueService.isAllowed(queue, userId)
+                .map(AllowedUserResponse::new);
+    }
 }
